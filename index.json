@@ -1,0 +1,12 @@
+{
+  "name": "reports-index",
+  "fields": [
+    { "name": "id", "type": "Edm.String", "key": true },
+    { "name": "timestamp", "type": "Edm.String" },
+    { "name": "python_version", "type": "Edm.String" },
+    { "name": "platform", "type": "Edm.String" },
+    { "name": "packages", "type": "Collection(Edm.String)" },
+    { "name": "plugins", "type": "Collection(Edm.String)" },
+    { "name": "playwright_platform", "type": "Edm.String" }
+  ]
+}

@@ -1,0 +1,6 @@
+azure-identity
+azure-storage-file-share
+azure-search-documents
+beautifulsoup4
+requests
+azure-mgmt-storage

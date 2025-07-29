@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fileprocessor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fileprocessor
+  template:
+    metadata:
+      labels:
+        app: fileprocessor
+    spec:
+      containers:
+      - name: fileprocessor
+        image: fileprocessacr.azurecr.io/fileprocessor:v6
+        imagePullPolicy: Always
+        env:
+        - name: TENANT_ID
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: TENANT_ID
+        - name: CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: CLIENT_ID
+        - name: CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: CLIENT_SECRET
+        - name: SUBSCRIPTION_ID
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: SUBSCRIPTION_ID
+        - name: RESOURCE_GROUP
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: RESOURCE_GROUP
+        - name: STORAGE_ACCOUNT
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: STORAGE_ACCOUNT
+        - name: SEARCH_ENDPOINT
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: SEARCH_ENDPOINT
+        - name: SEARCH_INDEX
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: SEARCH_INDEX
+        - name: SEARCH_KEY
+          valueFrom:
+            secretKeyRef:
+              name: sp-secrets
+              key: SEARCH_KEY
+        - name: POLL_INTERVAL
+          value: "60"
+      imagePullSecrets:
+      - name: acr-credentials
