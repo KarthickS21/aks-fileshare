@@ -84,11 +84,11 @@ def process_file(file_path, file_client):
         result = {
             "id": str(uuid.uuid4()),
             "timestamp": timestamp,
-            "python_version": env.get("Python"),
-            "platform": env.get("Platform"),
-            "packages": [f"{k}: {v}" for k, v in env.get("Packages", {}).items()],
-            "plugins": [f"{k}: {v}" for k, v in env.get("plugins", {}).items()],
-            "playwright_platform": env.get("PLATFORM"),
+            "python_version": get_value(env, "Python"),
+            "platform": get_value(env, "Platform"),
+            "packages": [f"{k}: {v}" for k, v in get_dict(env, "Packages").items()],
+            "plugins": [f"{k}: {v}" for k, v in get_dict(env, "plugins").items()],
+            "playwright_platform": get_value(env, "PLATFORM"),
         }
 
         push_to_search(result)
@@ -99,6 +99,21 @@ def process_file(file_path, file_client):
         logging.error(f"Error processing file {file_path}: {traceback.format_exc()}")
         return "error"
 
+def get_value(env: dict, key: str):
+    """
+    Tries to retrieve `key` from env["environment"] or directly from env.
+    """
+    if isinstance(env.get("environment"), dict) and key in env["environment"]:
+        return env["environment"].get(key)
+    return env.get(key)
+
+def get_dict(env: dict, key: str):
+    """
+    Tries to retrieve a nested dictionary for things like Packages or plugins.
+    """
+    if isinstance(env.get("environment"), dict) and isinstance(env["environment"].get(key), dict):
+        return env["environment"].get(key, {})
+    return env.get(key, {})
 
 def push_to_search(doc):
     try:
